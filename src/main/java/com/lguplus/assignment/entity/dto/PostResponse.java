@@ -9,11 +9,13 @@ public class PostResponse {
     private Long postId;
     private String title;
     private String authorUsername;
+    private Long viewCount;
 
-    @Builder
+
     public PostResponse(Post post) {
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.authorUsername = post.getMember().getUsername();
+        this.viewCount=post.getViewCount();
     }
 }

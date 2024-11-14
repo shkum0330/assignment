@@ -10,6 +10,7 @@ public class PostDetailResponse {
     private String title;
     private String content;
     private String authorUsername;
+    private Long viewCount;
 
     @Builder
     public PostDetailResponse(Post post) {
@@ -17,5 +18,6 @@ public class PostDetailResponse {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.authorUsername = post.getMember().getUsername();
+        this.viewCount=post.getViewCount();
     }
 }

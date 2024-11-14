@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
 @Slf4j
 public class PostController {
@@ -49,13 +49,12 @@ public class PostController {
     public ResponseEntity<?> getAllPosts(@PageableDefault(size = 5, sort = "postId",
             direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(value = "lastPostId", required = false) Long lastPostId) {
-        log.info("lastpostid={}",lastPostId);
         return ResponseEntity.ok(postService.getAllPosts(lastPostId, pageable));
     }
 
     // 게시글 단건 조회
     @GetMapping("/{postId}")
-    public ResponseEntity<?> getPostById(@PathVariable("postId") Post post) {
-        return ResponseEntity.ok(new PostDetailResponse(post));
+    public ResponseEntity<?> getPostById(@RequestHeader("Authorization") String token, @PathVariable("postId") Long postId) {
+        return ResponseEntity.ok(postService.getPostDetails(token,postId));
     }
 }

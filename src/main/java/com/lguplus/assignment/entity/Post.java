@@ -1,5 +1,6 @@
 package com.lguplus.assignment.entity;
 
+import com.lguplus.assignment.global.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import static lombok.AccessLevel.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Post {
+public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
@@ -28,7 +29,7 @@ public class Post {
     private Member member;
 
     @Column(nullable = false)
-    private Long viewCount;
+    private Long viewCount=0L;
 
     public void incrementViewCount() {
         this.viewCount++;
