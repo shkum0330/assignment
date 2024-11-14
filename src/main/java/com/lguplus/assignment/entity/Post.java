@@ -1,6 +1,7 @@
 package com.lguplus.assignment.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,8 +15,7 @@ import static lombok.AccessLevel.*;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "board_id")
-    private Long id;
+    private Long postId;
 
     @Column(nullable = false, length = 100)
     private String title;
@@ -24,13 +24,36 @@ public class Post {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @Column(nullable = false)
     private Long viewCount;
 
+    public void incrementViewCount() {
+        this.viewCount++;
+    }
+
     private boolean isDeleted;
 
-    private LocalDateTime deletedDate;
+    private LocalDateTime deletedDate=null;
+
+    @Builder
+    public Post(String title, String content, Member member, Long viewCount, boolean isDeleted) {
+        this.title = title;
+        this.content = content;
+        this.member = member;
+        this.viewCount = viewCount;
+        this.isDeleted = false;
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public void setDeleted() {
+        this.isDeleted=true;
+        this.deletedDate=LocalDateTime.now();
+    }
 }

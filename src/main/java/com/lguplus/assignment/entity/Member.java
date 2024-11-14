@@ -20,8 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class Member {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "member_id")
-    private Long id;
+    private Long memberId;
 
     @Column(nullable = false, unique = true, length = 50)
     private String username; // 로그인 id

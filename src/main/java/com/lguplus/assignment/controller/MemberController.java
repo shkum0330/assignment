@@ -15,28 +15,20 @@ public class MemberController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody MemberRequest memberRequest) {
-        try {
-            memberService.register(memberRequest);
-            return ResponseEntity.ok("회원가입이 완료되었습니다.");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        memberService.register(memberRequest);
+        return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody MemberRequest memberRequest) {
-        try {
-            String token = memberService.login(memberRequest);
-            return ResponseEntity.ok(token);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+      String token = memberService.login(memberRequest);
+      return ResponseEntity.ok(token);
     }
 
     @GetMapping("/members")
     public ResponseEntity<MemberResponse> getMemberDetails(@RequestHeader("Authorization") String token) {
-        MemberResponse memberResponseDTO = memberService.getMemberDetails(token);
-        return ResponseEntity.ok(memberResponseDTO);
+        MemberResponse memberResponse = memberService.getMemberDetails(token);
+        return ResponseEntity.ok(memberResponse);
     }
 
     @DeleteMapping("/members")

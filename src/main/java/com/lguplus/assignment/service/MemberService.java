@@ -27,6 +27,7 @@ public class MemberService {
         Member member = Member.builder()
                 .username(memberRequest.getUsername())
                 .password(encode(memberRequest.getPassword()))
+                .nickname(memberRequest.getNickname())
                 .build();
 
         memberRepository.save(member);
@@ -38,7 +39,7 @@ public class MemberService {
         if (!matches(memberRequest.getPassword(), member.getPassword())) {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
-        return jwtUtil.generateToken(member.getId());
+        return jwtUtil.generateToken(member.getMemberId());
     }
 
     public MemberResponse getMemberDetails(String token) {

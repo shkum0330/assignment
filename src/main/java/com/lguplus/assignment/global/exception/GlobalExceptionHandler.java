@@ -13,7 +13,22 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NicknameAlreadyExistsException.class)
-    public ResponseEntity<String> handleNicknameAlreadyExistsException(NicknameAlreadyExistsException ex) {
+    public ResponseEntity<?> handleNicknameAlreadyExistsException(NicknameAlreadyExistsException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<?> handleUnauthorizedException(UnauthorizedException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(UnauthorizedPostAccessException.class)
+    public ResponseEntity<?> handleUnauthorizedPostAccessException(UnauthorizedPostAccessException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGeneralException(Exception ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

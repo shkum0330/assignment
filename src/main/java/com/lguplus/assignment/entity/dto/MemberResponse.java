@@ -6,13 +6,13 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class MemberResponse {
-    private Long id;
+    private Long memberId;
     private String username;
     private String password;
     private String nickname;
 
-    public MemberResponse(Long id, String username,String nickname) {
-        this.id = id;
+    public MemberResponse(Long memberId, String username, String nickname) {
+        this.memberId = memberId;
         this.username = username;
         this.nickname=nickname;
     }
