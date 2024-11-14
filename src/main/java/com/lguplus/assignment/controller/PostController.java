@@ -1,15 +1,24 @@
 package com.lguplus.assignment.controller;
 
+import com.lguplus.assignment.entity.Post;
+import com.lguplus.assignment.entity.dto.PostDetailResponse;
 import com.lguplus.assignment.entity.dto.PostRequest;
 import com.lguplus.assignment.entity.dto.PostResponse;
 import com.lguplus.assignment.service.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
+@Slf4j
 public class PostController {
     private final PostService postService;
 
@@ -23,8 +32,8 @@ public class PostController {
     @PutMapping("/{postId}")
     public ResponseEntity<PostResponse> updatePost(@RequestHeader("Authorization") String token,
                                                       @PathVariable Long postId,
-                                                      @RequestBody PostRequest postRequestDTO) {
-        PostResponse postResponseDTO = postService.updatePost(token, postId, postRequestDTO);
+                                                      @RequestBody PostRequest postRequest) {
+        PostResponse postResponseDTO = postService.updatePost(token, postId, postRequest);
         return ResponseEntity.ok(postResponseDTO);
     }
 
@@ -33,5 +42,20 @@ public class PostController {
                                              @PathVariable Long postId) {
         postService.deletePost(token, postId);
         return ResponseEntity.ok("게시글이 삭제되었습니다.");
+    }
+
+    // 게시글 전체 조회 (공지사항 포함)
+    @GetMapping
+    public ResponseEntity<?> getAllPosts(@PageableDefault(size = 5, sort = "postId",
+            direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(value = "lastPostId", required = false) Long lastPostId) {
+        log.info("lastpostid={}",lastPostId);
+        return ResponseEntity.ok(postService.getAllPosts(lastPostId, pageable));
+    }
+
+    // 게시글 단건 조회
+    @GetMapping("/{postId}")
+    public ResponseEntity<?> getPostById(@PathVariable("postId") Post post) {
+        return ResponseEntity.ok(new PostDetailResponse(post));
     }
 }

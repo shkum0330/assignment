@@ -10,8 +10,12 @@ import com.lguplus.assignment.global.jwt.JwtUtil;
 import com.lguplus.assignment.repository.MemberRepository;
 import com.lguplus.assignment.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,12 +33,7 @@ public class PostService {
         Post post = new Post(postRequest.getTitle(), postRequest.getContent(), member, 0L, false);
         Post savedPost = postRepository.save(post);
 
-        return PostResponse.builder()
-                .postId(savedPost.getPostId())
-                .title(savedPost.getTitle())
-                .content(savedPost.getContent())
-                .authorUsername(member.getUsername())
-                .build();
+        return new PostResponse(savedPost);
     }
 
     @Transactional
@@ -49,12 +48,7 @@ public class PostService {
         post.update(postRequest.getTitle(), postRequest.getContent());
         Post updatedPost = postRepository.save(post);
 
-        return PostResponse.builder()
-                .postId(updatedPost.getPostId())
-                .title(updatedPost.getTitle())
-                .content(updatedPost.getContent())
-                .authorUsername(updatedPost.getMember().getUsername())
-                .build();
+        return new PostResponse(updatedPost);
     }
 
     @Transactional
@@ -65,7 +59,14 @@ public class PostService {
         if (!post.getMember().getMemberId().equals(memberId)) {
             throw new UnauthorizedPostAccessException("본인이 작성한 게시글만 삭제할 수 있습니다.");
         }
-
         post.setDeleted(); // 소프트 삭제
+    }
+
+    // 게시글 리스트 조회
+    @Transactional(readOnly = true)
+    public List<PostResponse> getAllPosts(Long lastPostId, Pageable pageable) {
+        Page<Post> posts = postRepository.findPostsByLastPostId(lastPostId, pageable);
+
+        return posts.stream().map(PostResponse::new).toList();
     }
 }

@@ -5,15 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class PostResponse {
+public class PostDetailResponse {
     private Long postId;
     private String title;
+    private String content;
     private String authorUsername;
 
     @Builder
-    public PostResponse(Post post) {
+    public PostDetailResponse(Post post) {
         this.postId = post.getPostId();
         this.title = post.getTitle();
+        this.content = post.getContent();
         this.authorUsername = post.getMember().getUsername();
     }
 }
