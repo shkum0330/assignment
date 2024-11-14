@@ -1,4 +1,4 @@
-package com.lguplus.assignment.domain.dto;
+package com.lguplus.assignment.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

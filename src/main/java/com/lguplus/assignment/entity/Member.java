@@ -1,4 +1,4 @@
-package com.lguplus.assignment.domain;
+package com.lguplus.assignment.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,10 +24,13 @@ public class Member {
     private Long id;
 
     @Column(nullable = false, unique = true, length = 50)
-    private String username;
+    private String username; // 로그인 id
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false, unique = true, length = 50)
+    private String nickname;
 
     @Column(nullable = false)
     private boolean isDeleted;
@@ -35,9 +38,10 @@ public class Member {
     private LocalDateTime deletedDate;
 
     @Builder
-    public Member(String username, String password) {
+    public Member(String username, String password,String nickname) {
         this.username = username;
         this.password = password;
+        this.nickname=nickname;
     }
 
     public void deleteMember(String deletionReason, Clock clock) {
