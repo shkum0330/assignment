@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -132,7 +131,7 @@ public class PostService {
         List<Post> posts = response.getPosts().stream()
                 .map(postItem -> Post.builder()
                         .title(postItem.getSource().getTitle().trim()) // 제목
-                        .content("Link: " + postItem.getSource().getId().trim()) // 링크를 본문에 저장
+                        .content(postItem.getSource().getId().trim()) // 링크를 본문에 저장
                         .member(member)
                         .viewCount(0L)
                         .isDeleted(false)

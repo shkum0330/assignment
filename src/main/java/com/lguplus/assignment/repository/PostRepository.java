@@ -13,6 +13,7 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     @Query("""
     SELECT p FROM Post p 
     WHERE (:lastPostId IS NULL OR p.postId < :lastPostId) 
+    AND p.isDeleted = false
     ORDER BY p.postId DESC """)
     Page<Post> findPostsByLastPostId(
             @Param("lastPostId") Long lastPostId,
