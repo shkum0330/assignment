@@ -3,6 +3,7 @@ package com.lguplus.assignment.service;
 import com.lguplus.assignment.entity.Member;
 import com.lguplus.assignment.entity.Post;
 import com.lguplus.assignment.entity.PostView;
+import com.lguplus.assignment.entity.dto.ExternalPostResponse;
 import com.lguplus.assignment.entity.dto.PostDetailResponse;
 import com.lguplus.assignment.entity.dto.PostRequest;
 import com.lguplus.assignment.entity.dto.PostResponse;
@@ -18,10 +19,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class PostService {
     private final MemberRepository memberRepository;
     private final PostViewRepository postViewRepository;
     private final JwtUtil jwtUtil;
+    private final WebClient webClient;
 
     @Transactional
     public PostResponse createPost(String token, PostRequest postRequest) {
@@ -104,7 +108,37 @@ public class PostService {
                 postViewRepository.save(postView);
             }
         }
-
         return new PostDetailResponse(post);
+    }
+
+    public void importExternalPosts(String token) {
+        // 사용자 확인
+        Long memberId = jwtUtil.validateToken(token);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        // 외부 API 호출
+        ExternalPostResponse response = webClient.get()
+                .uri("/api/v1/posts")
+                .retrieve()
+                .bodyToMono(ExternalPostResponse.class)
+                .block(); // 비동기 호출을 동기로 전환
+
+        if (response == null || response.getPosts() == null || response.getPosts().isEmpty()) {
+            throw new RuntimeException("외부 게시글 데이터가 없습니다.");
+        }
+
+        // 게시글 저장
+        List<Post> posts = response.getPosts().stream()
+                .map(postItem -> Post.builder()
+                        .title(postItem.getSource().getTitle().trim()) // 제목
+                        .content("Link: " + postItem.getSource().getId().trim()) // 링크를 본문에 저장
+                        .member(member)
+                        .viewCount(0L)
+                        .isDeleted(false)
+                        .build())
+                .collect(Collectors.toList());
+
+        postRepository.saveAll(posts);
     }
 }

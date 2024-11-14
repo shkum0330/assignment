@@ -57,4 +57,11 @@ public class PostController {
     public ResponseEntity<?> getPostById(@RequestHeader("Authorization") String token, @PathVariable("postId") Long postId) {
         return ResponseEntity.ok(postService.getPostDetails(token,postId));
     }
+
+    // 외부 게시글 등록
+    @PostMapping("/import-external")
+    public ResponseEntity<String> importExternalPosts(@RequestHeader("Authorization") String token) {
+        postService.importExternalPosts(token);
+        return ResponseEntity.ok("외부 게시글이 성공적으로 등록되었습니다.");
+    }
 }

@@ -26,7 +26,6 @@ public class PostView extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(nullable = false)
     private LocalDate viewDate;
 
     @Builder
