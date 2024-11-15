@@ -29,7 +29,6 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-
     @Column(nullable = false)
     private Long viewCount=0L;
 

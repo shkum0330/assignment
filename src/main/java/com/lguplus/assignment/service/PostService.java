@@ -116,7 +116,7 @@ public class PostService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-        Post post = postRepository.findPostDetails(postId)
+        Post post = postRepository.findPostWithLock(postId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
         // 본인이 작성한 게시글은 조회수 증가 제외
