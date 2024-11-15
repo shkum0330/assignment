@@ -1,5 +1,6 @@
 package com.lguplus.assignment.service;
 
+import com.lguplus.assignment.entity.Comment;
 import com.lguplus.assignment.entity.Member;
 import com.lguplus.assignment.entity.Post;
 import com.lguplus.assignment.entity.PostView;
@@ -11,6 +12,7 @@ import com.lguplus.assignment.global.exception.PostNotFoundException;
 import com.lguplus.assignment.global.exception.UnauthorizedException;
 import com.lguplus.assignment.global.exception.UnauthorizedPostAccessException;
 import com.lguplus.assignment.global.jwt.JwtUtil;
+import com.lguplus.assignment.repository.CommentRepository;
 import com.lguplus.assignment.repository.MemberRepository;
 import com.lguplus.assignment.repository.PostRepository;
 import com.lguplus.assignment.repository.PostViewRepository;
@@ -31,6 +33,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final PostViewRepository postViewRepository;
+    private final CommentRepository commentRepository;
     private final JwtUtil jwtUtil;
     private final WebClient webClient;
 
@@ -70,6 +73,31 @@ public class PostService {
             throw new UnauthorizedPostAccessException("본인이 작성한 게시글만 삭제할 수 있습니다.");
         }
         post.setDeleted(); // 소프트 삭제
+
+        // 댓글도 같이 삭제
+        List<Comment> comments = commentRepository.findByPost(post);
+
+        for (Comment comment : comments) {
+            // 댓글 및 대댓글 소프트 삭제 처리
+            comment.setDeleted();
+
+            if (comment.getReplies() != null) {
+                for (Comment reply : comment.getReplies()) {
+                    softDeleteCommentAndReplies(reply);
+                }
+            }
+        }
+    }
+
+    private void softDeleteCommentAndReplies(Comment comment) {
+        // 댓글 및 대댓글 소프트 삭제 처리
+        comment.setDeleted();
+
+        if (comment.getReplies() != null) {
+            for (Comment reply : comment.getReplies()) {
+                softDeleteCommentAndReplies(reply);
+            }
+        }
     }
 
     // 게시글 리스트 조회
@@ -80,6 +108,7 @@ public class PostService {
         return posts.stream().map(PostResponse::new).toList();
     }
 
+    // 동시 요청이 들어오면 어떻게 될까?
     @Transactional
     public PostDetailResponse getPostDetails(String token,Long postId) {
         Long memberId = jwtUtil.validateToken(token);

@@ -25,16 +25,16 @@ public class PostController {
     @PostMapping
     public ResponseEntity<PostResponse> createPost(@RequestHeader("Authorization") String token,
                                                    @RequestBody PostRequest postRequest) {
-        PostResponse postResponseDTO = postService.createPost(token, postRequest);
-        return ResponseEntity.ok(postResponseDTO);
+        PostResponse postResponse = postService.createPost(token, postRequest);
+        return ResponseEntity.ok(postResponse);
     }
 
     @PutMapping("/{postId}")
     public ResponseEntity<PostResponse> updatePost(@RequestHeader("Authorization") String token,
                                                       @PathVariable Long postId,
                                                       @RequestBody PostRequest postRequest) {
-        PostResponse postResponseDTO = postService.updatePost(token, postId, postRequest);
-        return ResponseEntity.ok(postResponseDTO);
+        PostResponse postResponse = postService.updatePost(token, postId, postRequest);
+        return ResponseEntity.ok(postResponse);
     }
 
     @DeleteMapping("/{postId}")
@@ -44,7 +44,7 @@ public class PostController {
         return ResponseEntity.ok("게시글이 삭제되었습니다.");
     }
 
-    // 게시글 전체 조회 (공지사항 포함)
+    // 게시글 전체 조회
     @GetMapping
     public ResponseEntity<?> getAllPosts(@PageableDefault(size = 5, sort = "postId",
             direction = Sort.Direction.DESC) Pageable pageable,

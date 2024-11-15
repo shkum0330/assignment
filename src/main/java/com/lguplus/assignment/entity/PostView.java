@@ -32,6 +32,6 @@ public class PostView extends BaseTimeEntity {
     public PostView(Post post, Member member, LocalDate viewDate) {
         this.post = post;
         this.member = member;
-        this.viewDate=viewDate;
+        this.viewDate = viewDate;
     }
 }
