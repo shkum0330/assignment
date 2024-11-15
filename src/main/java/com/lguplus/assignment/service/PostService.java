@@ -9,6 +9,7 @@ import com.lguplus.assignment.entity.dto.response.PostDetailResponse;
 import com.lguplus.assignment.entity.dto.request.PostRequest;
 import com.lguplus.assignment.entity.dto.response.PostResponse;
 import com.lguplus.assignment.global.exception.PostNotFoundException;
+import com.lguplus.assignment.global.exception.UnauthorizedException;
 import com.lguplus.assignment.global.exception.UnauthorizedPostAccessException;
 import com.lguplus.assignment.global.jwt.JwtUtil;
 import com.lguplus.assignment.repository.CommentRepository;
@@ -142,7 +143,7 @@ public class PostService {
         // 사용자 확인
         Long memberId = jwtUtil.validateToken(token);
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UnauthorizedException("사용자를 찾을 수 없습니다."));
 
         // 외부 API 호출
         ExternalPostResponse response = webClient.get()

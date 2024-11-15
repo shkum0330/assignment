@@ -3,6 +3,7 @@ package com.lguplus.assignment.controller;
 import com.lguplus.assignment.entity.dto.request.PostRequest;
 import com.lguplus.assignment.entity.dto.response.PostResponse;
 import com.lguplus.assignment.service.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostResponse> createPost(@RequestHeader("Authorization") String token,
-                                                   @RequestBody PostRequest postRequest) {
+                                                   @RequestBody @Valid PostRequest postRequest) {
         PostResponse postResponse = postService.createPost(token, postRequest);
         return ResponseEntity.ok(postResponse);
     }
@@ -28,7 +29,7 @@ public class PostController {
     @PutMapping("/{postId}")
     public ResponseEntity<PostResponse> updatePost(@RequestHeader("Authorization") String token,
                                                       @PathVariable Long postId,
-                                                      @RequestBody PostRequest postRequest) {
+                                                      @RequestBody @Valid PostRequest postRequest) {
         PostResponse postResponse = postService.updatePost(token, postId, postRequest);
         return ResponseEntity.ok(postResponse);
     }

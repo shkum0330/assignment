@@ -3,6 +3,7 @@ package com.lguplus.assignment.controller;
 import com.lguplus.assignment.entity.dto.request.MemberRequest;
 import com.lguplus.assignment.entity.dto.response.MemberResponse;
 import com.lguplus.assignment.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody MemberRequest memberRequest) {
+    public ResponseEntity<?> register(@RequestBody @Valid MemberRequest memberRequest) {
         memberService.register(memberRequest);
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
