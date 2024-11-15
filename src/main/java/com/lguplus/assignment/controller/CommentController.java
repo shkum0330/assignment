@@ -1,7 +1,10 @@
 package com.lguplus.assignment.controller;
 
+import com.lguplus.assignment.entity.dto.request.CommentRequest;
 import com.lguplus.assignment.entity.dto.response.CommentResponse;
 import com.lguplus.assignment.service.CommentService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -22,16 +25,16 @@ public class CommentController {
     @PostMapping("/{postId}")
     public ResponseEntity<String> addComment(@PathVariable Long postId,
                                              @RequestHeader("Authorization") String token,
-                                             @RequestParam String content) {
-        commentService.addComment(postId, token, content);
+                                             @RequestBody @Valid CommentRequest commentRequest) {
+        commentService.addComment(postId, token, commentRequest.getContent());
         return ResponseEntity.ok("댓글이 등록되었습니다.");
     }
 
     @PostMapping("/reply/{parentCommentId}")
     public ResponseEntity<String> addReply(@PathVariable Long parentCommentId,
                                            @RequestHeader("Authorization") String token,
-                                           @RequestParam String content) {
-        commentService.addReply(parentCommentId, token, content);
+                                           @RequestBody @Valid CommentRequest commentRequest) {
+        commentService.addReply(parentCommentId, token, commentRequest.getContent());
         return ResponseEntity.ok("대댓글이 등록되었습니다.");
     }
 
@@ -41,8 +44,6 @@ public class CommentController {
             direction = Sort.Direction.DESC) Pageable pageable,
             @PathVariable Long postId,
             @RequestParam(value = "lastCommentId", required = false) Long lastCommentId) {
-        log.info("lastcommentid = {}",lastCommentId);
-        log.info("postid = {}",postId);
         List<CommentResponse> comments = commentService.getCommentsByPost(postId, lastCommentId,pageable);
         return ResponseEntity.ok(comments);
     }

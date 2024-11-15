@@ -1,4 +1,4 @@
-package com.lguplus.assignment.global.exception;
+package com.lguplus.assignment.global.exception.custom;
 
 public class DuplicateUsernameException extends RuntimeException {
     public DuplicateUsernameException(String message) {

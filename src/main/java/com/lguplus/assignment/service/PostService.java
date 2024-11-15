@@ -8,9 +8,9 @@ import com.lguplus.assignment.entity.dto.response.ExternalPostResponse;
 import com.lguplus.assignment.entity.dto.response.PostDetailResponse;
 import com.lguplus.assignment.entity.dto.request.PostRequest;
 import com.lguplus.assignment.entity.dto.response.PostResponse;
-import com.lguplus.assignment.global.exception.PostNotFoundException;
-import com.lguplus.assignment.global.exception.UnauthorizedException;
-import com.lguplus.assignment.global.exception.UnauthorizedPostAccessException;
+import com.lguplus.assignment.global.exception.custom.PostNotFoundException;
+import com.lguplus.assignment.global.exception.custom.UnauthorizedException;
+import com.lguplus.assignment.global.exception.custom.UnauthorizedPostAccessException;
 import com.lguplus.assignment.global.jwt.JwtUtil;
 import com.lguplus.assignment.repository.CommentRepository;
 import com.lguplus.assignment.repository.MemberRepository;
@@ -121,7 +121,7 @@ public class PostService {
 
         // 본인이 작성한 게시글은 조회수 증가 제외
         if (!post.getMember().getMemberId().equals(memberId)) {
-            // 조회 기록이 없는 경우에만 조회수 증가
+            // 해당 날짜에 조회 기록이 없는 경우에만 조회수 증가
             if (!postViewRepository.existsByPostAndMemberAndViewDate(post, member, LocalDate.now())) {
                 post.incrementViewCount();
                 postRepository.save(post);
