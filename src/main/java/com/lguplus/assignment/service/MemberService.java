@@ -1,8 +1,8 @@
 package com.lguplus.assignment.service;
 
 import com.lguplus.assignment.entity.Member;
-import com.lguplus.assignment.entity.dto.MemberRequest;
-import com.lguplus.assignment.entity.dto.MemberResponse;
+import com.lguplus.assignment.entity.dto.request.MemberRequest;
+import com.lguplus.assignment.entity.dto.response.MemberResponse;
 import com.lguplus.assignment.global.exception.DuplicateUsernameException;
 import com.lguplus.assignment.global.jwt.JwtUtil;
 import com.lguplus.assignment.repository.MemberRepository;

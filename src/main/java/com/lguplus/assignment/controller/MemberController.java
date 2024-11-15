@@ -1,7 +1,7 @@
 package com.lguplus.assignment.controller;
 
-import com.lguplus.assignment.entity.dto.MemberRequest;
-import com.lguplus.assignment.entity.dto.MemberResponse;
+import com.lguplus.assignment.entity.dto.request.MemberRequest;
+import com.lguplus.assignment.entity.dto.response.MemberResponse;
 import com.lguplus.assignment.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.lguplus.assignment.entity.dto;
+package com.lguplus.assignment.entity.dto.response;
 
 import com.lguplus.assignment.entity.Post;
 import lombok.Builder;

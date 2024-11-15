@@ -3,6 +3,7 @@ package com.lguplus.assignment.service;
 import com.lguplus.assignment.entity.Comment;
 import com.lguplus.assignment.entity.Member;
 import com.lguplus.assignment.entity.Post;
+import com.lguplus.assignment.entity.dto.response.CommentResponse;
 import com.lguplus.assignment.global.exception.CommentNotFoundException;
 import com.lguplus.assignment.global.exception.PostNotFoundException;
 import com.lguplus.assignment.global.exception.UnauthorizedException;
@@ -11,11 +12,17 @@ import com.lguplus.assignment.repository.CommentRepository;
 import com.lguplus.assignment.repository.MemberRepository;
 import com.lguplus.assignment.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
@@ -64,5 +71,14 @@ public class CommentService {
     @Transactional
     public void deleteCommentsByPost(Post post) {
         commentRepository.deleteByPost(post); // 게시글과 연관된 댓글 삭제
+    }
+
+    @Transactional(readOnly = true)
+    public List<CommentResponse> getCommentsByPost(Long postId, Long lastCommentId, Pageable pageable) {
+        Page<Comment> comments = commentRepository.findCommentsByPostIdAndLastCommentId(postId, lastCommentId, pageable);
+        log.info("postId = {}",postId);
+        return comments.stream()
+                .map(CommentResponse::new)
+                .toList();
     }
 }

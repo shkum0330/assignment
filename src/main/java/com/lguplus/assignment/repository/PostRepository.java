@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post,Long> {
+
+    // no offset 페이징
     @Query("""
     SELECT p FROM Post p 
     WHERE (:lastPostId IS NULL OR p.postId < :lastPostId) 

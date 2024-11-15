@@ -1,9 +1,7 @@
 package com.lguplus.assignment.controller;
 
-import com.lguplus.assignment.entity.Post;
-import com.lguplus.assignment.entity.dto.PostDetailResponse;
-import com.lguplus.assignment.entity.dto.PostRequest;
-import com.lguplus.assignment.entity.dto.PostResponse;
+import com.lguplus.assignment.entity.dto.request.PostRequest;
+import com.lguplus.assignment.entity.dto.response.PostResponse;
 import com.lguplus.assignment.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +10,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/posts")

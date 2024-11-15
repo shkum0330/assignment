@@ -1,4 +1,4 @@
-package com.lguplus.assignment.entity.dto;
+package com.lguplus.assignment.entity.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
