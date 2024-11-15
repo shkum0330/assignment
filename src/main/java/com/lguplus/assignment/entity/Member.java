@@ -32,7 +32,7 @@ public class Member {
     private String nickname;
 
     @Column(nullable = false)
-    private boolean isDeleted;
+    private boolean isDeleted=false;
 
     private LocalDateTime deletedDate;
 

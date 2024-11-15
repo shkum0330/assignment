@@ -8,8 +8,11 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Repository
 public interface PostViewRepository extends JpaRepository<PostView,Long> {
     boolean existsByPostAndMemberAndViewDate(Post post, Member member, LocalDate viewDate);
+
+    Optional<PostView> findByPostAndMember(Post post, Member member);
 }

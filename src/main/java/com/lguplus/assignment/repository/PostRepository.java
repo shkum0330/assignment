@@ -1,5 +1,6 @@
 package com.lguplus.assignment.repository;
 
+import com.lguplus.assignment.entity.Member;
 import com.lguplus.assignment.entity.Post;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;

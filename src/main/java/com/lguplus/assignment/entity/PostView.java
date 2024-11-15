@@ -34,4 +34,5 @@ public class PostView extends BaseTimeEntity {
         this.member = member;
         this.viewDate = viewDate;
     }
+
 }
